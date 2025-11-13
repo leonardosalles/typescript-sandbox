@@ -1,0 +1,18 @@
+{
+  "name": "figma-mcp-tool",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx fastmcp dev index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.19.1",
+    "@types/node": "^24.6.2",
+    "fastmcp": "^3.19.0",
+    "zod": "^4.1.11"
+  }
+}
