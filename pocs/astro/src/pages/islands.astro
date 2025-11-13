@@ -1,0 +1,27 @@
+---
+import Counter from "../components/Counter.astro";
+import WeatherIsland from "../components/Weather.astro";
+---
+
+<html>
+  <head>
+    <title>Astro Islands Deep Dive</title>
+  </head>
+  <body class="p-4 font-sans">
+    <h1>Astro Islands</h1>
+    <p>Hidration strategy.</p>
+
+    <section>
+      <h2>Counter (client:load)</h2>
+      <Counter client:load />
+
+      <h2>Weather (client:visible)</h2>
+      <WeatherIsland client:visible />
+    </section>
+
+    <footer class="mt-8 text-sm text-gray-500">
+      Inspect the HTML: you will see that the content is already rendered and
+      the JS loads on demand.
+    </footer>
+  </body>
+</html>

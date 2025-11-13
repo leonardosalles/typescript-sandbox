@@ -1,0 +1,10 @@
+---
+const { data } = Astro.props;
+---
+
+<section>
+  <h2>Heavy Data (server rendered):</h2>
+  <ul>
+    {data.map((item: any) => <li>{item}</li>)}
+  </ul>
+</section>

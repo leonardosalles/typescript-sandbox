@@ -1,0 +1,3 @@
+
+    export type RemoteKeys = 'checkout/CartPage' | 'checkout/PaymentForm' | 'checkout/Summary' | 'checkout/Header';
+    type PackageType<T> = T extends 'checkout/Header' ? typeof import('checkout/Header') :T extends 'checkout/Summary' ? typeof import('checkout/Summary') :T extends 'checkout/PaymentForm' ? typeof import('checkout/PaymentForm') :T extends 'checkout/CartPage' ? typeof import('checkout/CartPage') :any;

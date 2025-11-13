@@ -1,0 +1,19 @@
+<div class="border p-2">
+  <p>Count:</p>
+  <button id="btn">+1</button>
+  <span id="count">0</span>
+
+  <script>
+    let count = 0;
+    const button = document.querySelector("#btn") as HTMLButtonElement;
+    if (button) {
+      button.onclick = () => {
+        count++;
+        const countElement = document.querySelector("#count");
+        if (countElement) {
+          countElement.textContent = count.toString();
+        }
+      };
+    }
+  </script>
+</div>

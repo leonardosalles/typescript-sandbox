@@ -1,0 +1,10 @@
+---
+const weather = await fetch(
+  "https://api.open-meteo.com/v1/forecast?latitude=-30.03&longitude=-51.23&current_weather=true"
+).then((r) => r.json());
+---
+
+<div class="border p-2">
+  <p>Porto Alegre - Weather now:</p>
+  <p><strong>{weather.current_weather.temperature} degrees</strong></p>
+</div>

@@ -1,0 +1,31 @@
+---
+import fs from "fs";
+import path from "path";
+import * as astroCompiler from "@astrojs/compiler";
+
+const componentPath = path.resolve("./src/components/Counter.astro");
+const source = fs.readFileSync(componentPath, "utf-8");
+
+const compiled = await astroCompiler.compile(source);
+---
+
+<div class="space-y-4">
+  <details open class="border p-3 rounded bg-gray-50">
+    <summary class="cursor-pointer font-semibold"
+      >Original file (.astro)</summary
+    >
+    <pre
+      class="overflow-x-auto text-sm bg-gray-100 p-2 rounded"><code>{source}</code></pre>
+  </details>
+
+  <details class="border p-3 rounded bg-gray-50">
+    <summary class="cursor-pointer font-semibold">Compiled code (.js)</summary>
+    <pre
+      class="overflow-x-auto text-sm bg-gray-100 p-2 rounded"><code>{compiled}</code></pre>
+  </details>
+
+  <p class="text-xs text-gray-500">
+    *The code above was generated via <code>@astrojs/compiler</code>, the same
+    compiler used internally by the Astro CLI.
+  </p>
+</div>

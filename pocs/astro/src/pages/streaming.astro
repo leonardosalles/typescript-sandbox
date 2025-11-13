@@ -1,0 +1,19 @@
+---
+import HeavyDataSSR from "../components/HeavyData.astro";
+
+const dataPromise = new Promise((resolve) => {
+  setTimeout(() => resolve(["item 1", "item 2", "item 3"]), 5000);
+});
+
+const data = await dataPromise;
+---
+
+<html>
+  <head><title>SSR Streaming</title></head>
+  <body class="p-4">
+    <h1>SSR Streaming</h1>
+
+    <p>Loading partial HTML with SSR Streaming.</p>
+    <HeavyDataSSR data={data} />
+  </body>
+</html>

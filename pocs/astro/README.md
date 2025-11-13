@@ -1,0 +1,24 @@
+# Astro ToDo POC
+
+![Screenshot](screenshot.png)
+
+## 🚀 Project Structure
+
+Inside of your Astro project, you'll see the following folders and files:
+
+```text
+/
+├── public/
+│   └── favicon.svg
+├── src
+│   ├── components/react
+│   │   └── Container
+│   │   └── AddTodo
+│   │   └── TodoList
+│   │   └── DeleteTodo
+│   ├── layouts
+│   │   └── Layout.astro
+│   └── pages
+│       └── index.astro
+└── package.json
+```
