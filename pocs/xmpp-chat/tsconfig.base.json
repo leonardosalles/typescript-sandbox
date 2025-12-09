@@ -1,0 +1,15 @@
+{
+  "compilerOptions":{
+    "target":"ES2020",
+    "module":"ESNext",
+    "moduleResolution":"Node",
+    "strict":true,
+    "skipLibCheck":true,
+    "esModuleInterop":true,
+    "jsx":"react-jsx",
+    "baseUrl":".",
+    "paths":{
+      "protocol":["packages/protocol/src"]
+    }
+  }
+}

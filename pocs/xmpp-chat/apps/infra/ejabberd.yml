@@ -1,0 +1,24 @@
+hosts:
+  - "localhost"
+
+loglevel: 4
+
+listen:
+  -
+    port: 5222
+    module: ejabberd_c2s
+
+  -
+    port: 5280
+    module: ejabberd_http
+    request_handlers:
+      "/xmpp-websocket": ejabberd_http_ws
+
+modules:
+  mod_ping: {}
+  mod_roster: {}
+  mod_offline: {}
+  mod_mam:
+    default: always
+  mod_stream_mgmt: {}
+  mod_carboncopy: {}
