@@ -19,10 +19,17 @@ export default function App() {
   const [peer, setPeer] = React.useState("");
   const [status, setStatus] = React.useState("disconnected");
 
+  const [typing, setTyping] = React.useState(false);
+  const [presenceMap, setPresenceMap] = React.useState<Record<string, string>>(
+    {}
+  );
+
   const meRef = React.useRef("");
   const peerRef = React.useRef("");
 
   const xmppRef = React.useRef<Client | null>(null);
+  const typingTimeout = React.useRef<NodeJS.Timeout | null>(null);
+
   const { add, update, clear } = useStore();
 
   const login = async (e: React.FormEvent) => {
@@ -66,9 +73,47 @@ export default function App() {
         setStatus("online");
 
         await xmpp.send(xml("presence"));
+
+        await xmpp.send(
+          xml("presence", {
+            to: peerJid,
+            type: "subscribe",
+          })
+        );
       });
 
       xmpp.on("stanza", (stanza) => {
+        if (stanza.is("presence") && stanza.attrs.type === "subscribe") {
+          xmpp.send(
+            xml("presence", {
+              to: stanza.attrs.from,
+              type: "subscribed",
+            })
+          );
+          return;
+        }
+
+        if (stanza.is("presence")) {
+          const from = bareJid(stanza.attrs.from);
+          if (!from) return;
+
+          if (from === meRef.current) return;
+
+          const type = stanza.attrs.type;
+
+          let show = "online";
+
+          if (type === "unavailable") show = "offline";
+          else show = stanza.getChildText("show") || "online";
+
+          setPresenceMap((p) => ({
+            ...p,
+            [from]: show,
+          }));
+
+          return;
+        }
+
         if (!stanza.is("message")) return;
 
         const from = bareJid(stanza.attrs.from as string | undefined);
@@ -82,7 +127,21 @@ export default function App() {
         );
         const request = stanza.getChild("request", "urn:xmpp:receipts");
 
+        const composing = stanza.getChild(
+          "composing",
+          "http://jabber.org/protocol/chatstates"
+        );
+        const paused = stanza.getChild(
+          "paused",
+          "http://jabber.org/protocol/chatstates"
+        );
+
+        if (composing) setTyping(true);
+        if (paused) setTyping(false);
+
         if (bodyEl && bodyEl.text() && from) {
+          setTyping(false);
+
           const msgId = stanzaId || crypto.randomUUID();
 
           const msg: ChatMessage = {
@@ -101,7 +160,10 @@ export default function App() {
               xml(
                 "message",
                 { to: from },
-                xml("received", { xmlns: "urn:xmpp:receipts", id: msgId })
+                xml("received", {
+                  xmlns: "urn:xmpp:receipts",
+                  id: msgId,
+                })
               )
             );
           }
@@ -165,6 +227,36 @@ export default function App() {
         xml("request", { xmlns: "urn:xmpp:receipts" })
       )
     );
+
+    setTyping(false);
+  };
+
+  const onTyping = () => {
+    if (!xmppRef.current || status !== "online") return;
+
+    xmppRef.current.send(
+      xml(
+        "message",
+        { to: peerRef.current, type: "chat" },
+        xml("composing", {
+          xmlns: "http://jabber.org/protocol/chatstates",
+        })
+      )
+    );
+
+    if (typingTimeout.current) clearTimeout(typingTimeout.current);
+
+    typingTimeout.current = setTimeout(() => {
+      xmppRef.current?.send(
+        xml(
+          "message",
+          { to: peerRef.current, type: "chat" },
+          xml("paused", {
+            xmlns: "http://jabber.org/protocol/chatstates",
+          })
+        )
+      );
+    }, 1500);
   };
 
   const disconnect = async () => {
@@ -219,7 +311,14 @@ export default function App() {
           </button>
 
           <div style={{ marginTop: 16, height: "60vh" }}>
-            <ChatWindow me={me} peer={peer} onSend={send} />
+            <ChatWindow
+              me={me}
+              peer={peer}
+              onSend={send}
+              onTyping={onTyping}
+              typing={typing}
+              presence={presenceMap[peer]}
+            />
           </div>
         </>
       )}

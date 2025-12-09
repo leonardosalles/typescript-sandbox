@@ -5,22 +5,36 @@ export default function ChatWindow({
   me,
   peer,
   onSend,
+  onTyping,
+  typing,
+  presence,
 }: {
   me: string;
   peer: string;
   onSend: (t: string) => void;
+  onTyping: () => void;
+  typing: boolean;
+  presence?: string;
 }) {
   const { messages } = useStore();
   const [text, setText] = React.useState("");
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!text.trim()) return;
     onSend(text.trim());
     setText("");
   };
+
   const filtered = messages.filter(
     (m) => (m.from === me && m.to === peer) || (m.from === peer && m.to === me)
   );
+
+  const presenceLabel =
+    presence === "chat" || presence === "online"
+      ? "online"
+      : presence || "offline";
+
   return (
     <div
       style={{
@@ -39,7 +53,22 @@ export default function ChatWindow({
         }}
       >
         Chat with {peer}
+        <div
+          style={{
+            fontSize: 12,
+            color: presenceLabel === "online" ? "green" : "#666",
+            marginTop: 2,
+          }}
+        >
+          {presenceLabel}
+        </div>
+        {typing && (
+          <div style={{ fontSize: 12, fontStyle: "italic", color: "#888" }}>
+            {peer} is typing...
+          </div>
+        )}
       </div>
+
       <div
         style={{
           flex: 1,
@@ -50,6 +79,7 @@ export default function ChatWindow({
       >
         {filtered.map((m) => {
           const mine = m.from === me;
+
           return (
             <div
               key={m.id}
@@ -87,13 +117,17 @@ export default function ChatWindow({
           );
         })}
       </div>
+
       <form
         onSubmit={handleSubmit}
         style={{ display: "flex", padding: 8, borderTop: "1px solid #eee" }}
       >
         <input
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => {
+            setText(e.target.value);
+            onTyping();
+          }}
           placeholder="Type a message..."
           style={{
             flex: 1,
@@ -103,6 +137,7 @@ export default function ChatWindow({
             marginRight: 8,
           }}
         />
+
         <button type="submit" style={{ padding: "8px 16px" }}>
           Send
         </button>
