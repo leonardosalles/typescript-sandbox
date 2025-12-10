@@ -70,7 +70,6 @@ The web application should now be running at `http://localhost:3000`.
 ## Technologies Used
 
 - **Frontend**: React, TypeScript
-- **XMPP Library**: Strophe.js or similar
 - **XMPP Server**: ejabberd
 - **Containerization**: Docker
 - **Package Manager**: pnpm
@@ -78,3 +77,10 @@ The web application should now be running at `http://localhost:3000`.
 ## What I learned?
 
 Trying to understand how WhatsApp uses XMPP to avoid reinventing the wheel. This uses XMPP to implement a simple chat application and have features like presence, read receipts and other cool stuffs that we have in core of XMPP.
+
+## Screenshots
+<img width="553" height="358" alt="1" src="https://github.com/user-attachments/assets/70a1a06f-d519-4213-b87c-56d384707d23" />
+<img width="553" height="358" alt="2" src="https://github.com/user-attachments/assets/3f665e36-624f-429d-8581-48acc7dfe5df" />
+<img width="553" height="358" alt="3" src="https://github.com/user-attachments/assets/67c65cca-5b1c-4095-a81b-cfda63215a83" />
+<img width="553" height="358" alt="4" src="https://github.com/user-attachments/assets/7e07093d-ffa0-4781-be71-359b9a89d465" />
+<img width="553" height="358" alt="5" src="https://github.com/user-attachments/assets/abec63ee-ca15-42ee-a5fd-e14ec205e27e" />
