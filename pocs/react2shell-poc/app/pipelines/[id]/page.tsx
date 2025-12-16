@@ -20,6 +20,8 @@ export default async function PipelinePage() {
         <br />
         <button type="submit">Save Transformer</button>
       </form>
+
+      <RunPipelineButton />
     </>
   );
 }
