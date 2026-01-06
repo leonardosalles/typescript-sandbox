@@ -10,6 +10,7 @@ const DynamicComponent = () => {
     const interval = setInterval(() => {
       setCount((prevCount) => prevCount + 1);
       const start = performance.now();
+
       // Simulate a rebuild
       setRebuildTime(performance.now() - start);
     }, 1000);
