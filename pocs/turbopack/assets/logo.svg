@@ -1,0 +1,17 @@
+<svg
+  width="120"
+  height="120"
+  viewBox="0 0 120 120"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <rect width="120" height="120" rx="20" fill="#0F172A" />
+
+  <path
+    d="M40 25 V95 H80"
+    fill="none"
+    stroke="#38BDF8"
+    stroke-width="14"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
