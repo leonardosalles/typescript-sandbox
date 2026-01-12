@@ -1,5 +1,4 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const turbopackConfig = {
   turbopack: {
     rules: {
       '*.svg': {
@@ -12,6 +11,4 @@ const nextConfig = {
       },
     },
   },
-};
-
-export default nextConfig;
+}
