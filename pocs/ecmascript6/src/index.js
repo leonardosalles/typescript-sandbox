@@ -1,8 +1,9 @@
 import { createSmartUser } from './meta-programming.js';
 import { microtaskChallenge } from './async-deep.js';
 import { primeGenerator } from './iterators.js';
+import { runMemoryTest } from './memory-test.js';
 import { BankAccount } from './private-weakmap.js';
-
+import { runStressTest } from './stress-test.js';
 import './reflect.js';
 
 console.log("--- PROXY ---");
@@ -18,6 +19,9 @@ console.log(primes.next().value);
 
 console.log("\n--- EVENT LOOP ---");
 microtaskChallenge();
+
+console.log("\n--- WEAKMAP AND MEMORY ---");
+runMemoryTest();
 
 const account = new BankAccount("Salles", 1000);
 console.log(account.balance);
