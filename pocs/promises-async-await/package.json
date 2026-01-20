@@ -1,0 +1,15 @@
+{
+  "name": "promises-async-await",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "esbuild src/index.js --bundle --platform=node --outfile=dist/bundle.js && node dist/bundle.js --expose-gc"
+  },
+  "keywords": [],
+  "author": "https://github.com/leonardosalles",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.27.2"
+  }
+}
