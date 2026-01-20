@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@import "../themes/base.css";
+@import "../themes/blackfriday.css";
+@import "../themes/halloween.css";
+@import "../themes/christmas.css";
+
+html,
+body {
+  background: rgb(var(--color-bg));
+  color: rgb(var(--color-text));
+}

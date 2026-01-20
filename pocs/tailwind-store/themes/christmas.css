@@ -1,0 +1,17 @@
+html[data-theme="christmas"] {
+  --color-bg: 246 248 246;
+  --color-surface: 255 255 255;
+  --color-surface-muted: 236 242 236;
+
+  --color-text: 20 40 30;
+  --color-text-muted: 90 120 100;
+
+  --color-primary: 22 163 74;
+  --color-primary-hover: 21 128 61;
+  --color-accent: 220 38 38;
+
+  --color-border: 210 220 210;
+
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.06);
+  --shadow-md: 0 16px 32px rgba(0,0,0,0.12);
+}

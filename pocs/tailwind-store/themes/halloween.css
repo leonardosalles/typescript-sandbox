@@ -1,0 +1,17 @@
+html[data-theme="halloween"] {
+  --color-bg: 12 12 12;
+  --color-surface: 22 22 22;
+  --color-surface-muted: 32 32 32;
+
+  --color-text: 255 255 255;
+  --color-text-muted: 180 180 180;
+
+  --color-primary: 249 115 22;
+  --color-primary-hover: 234 88 12;
+  --color-accent: 168 85 247;
+
+  --color-border: 45 45 45;
+
+  --shadow-sm: 0 6px 16px rgba(0,0,0,0.6);
+  --shadow-md: 0 32px 64px rgba(0,0,0,0.95);
+}

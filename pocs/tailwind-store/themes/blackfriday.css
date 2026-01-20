@@ -1,0 +1,17 @@
+html[data-theme="blackfriday"] {
+  --color-bg: 8 8 8;
+  --color-surface: 18 18 18;
+  --color-surface-muted: 28 28 28;
+
+  --color-text: 255 255 255;
+  --color-text-muted: 163 163 163;
+
+  --color-primary: 250 204 21;
+  --color-primary-hover: 234 179 8;
+  --color-accent: 239 68 68;
+
+  --color-border: 38 38 38;
+
+  --shadow-sm: 0 4px 10px rgba(0,0,0,0.6);
+  --shadow-md: 0 24px 48px rgba(0,0,0,0.9);
+}
