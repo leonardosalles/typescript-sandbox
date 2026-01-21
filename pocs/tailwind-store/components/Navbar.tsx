@@ -1,3 +1,4 @@
+import ThemeChaos from "./ThemeChaos";
 import ThemeSwitcher from "./ThemeSwitcher";
 
 export default function Navbar() {
@@ -13,6 +14,7 @@ export default function Navbar() {
         </ul>
 
         <ThemeSwitcher />
+        <ThemeChaos />
       </nav>
     </header>
   );
