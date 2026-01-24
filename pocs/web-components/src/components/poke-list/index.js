@@ -1,4 +1,5 @@
 import '../poke-card'
+import { fetchPokemons } from '../../services/fetch'
 
 class PokeList extends HTMLElement {
   static get observedAttributes() {
@@ -18,7 +19,7 @@ class PokeList extends HTMLElement {
   async load() {
     this.innerHTML = `<p>Loading...</p>`
 
-    const type = this.getAttribute('type')
+    const data = await fetchPokemons(this.page)
 
     this.innerHTML = `
       <h2 style="margin:16px 0;text-transform:uppercase">
@@ -31,6 +32,19 @@ class PokeList extends HTMLElement {
         gap:12px;
       "></div>
     `
+
+    const grid = this.querySelector('div')
+
+    data.results.forEach((p, i) => {
+      const id = this.page * 10 + i + 1
+      const card = document.createElement('poke-card')
+      card.setAttribute('name', p.name)
+      card.setAttribute(
+        'image',
+        `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
+      )
+      grid.appendChild(card)
+    })
   }
 }
 
