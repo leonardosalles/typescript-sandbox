@@ -1,0 +1,15 @@
+:host {
+  display: block;
+}
+
+nav {
+  padding: 16px;
+  background: #ef4444;
+  color: white;
+  font-weight: 600;
+  font-family: system-ui;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  justify-content: center;
+}

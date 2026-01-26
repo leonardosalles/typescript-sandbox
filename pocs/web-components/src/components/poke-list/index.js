@@ -1,5 +1,6 @@
 import '../poke-card'
 import { fetchPokemons } from '../../services/fetch'
+import { axiosPokemons } from '../../services/axios'
 
 class PokeList extends HTMLElement {
   static get observedAttributes() {
@@ -19,7 +20,11 @@ class PokeList extends HTMLElement {
   async load() {
     this.innerHTML = `<p>Loading...</p>`
 
-    const data = await fetchPokemons(this.page)
+    const type = this.getAttribute('type')
+    const data =
+      type === 'axios'
+        ? await axiosPokemons(this.page)
+        : await fetchPokemons(this.page)
 
     this.innerHTML = `
       <h2 style="margin:16px 0;text-transform:uppercase">
