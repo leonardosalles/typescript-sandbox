@@ -36,6 +36,8 @@ class PokeList extends HTMLElement {
         grid-template-columns:repeat(auto-fill,160px);
         gap:12px;
       "></div>
+
+      <poke-pagination page="${this.page}"></poke-pagination>
     `
 
     const grid = this.querySelector('div')
