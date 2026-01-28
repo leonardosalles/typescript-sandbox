@@ -72,9 +72,7 @@ class PokePagination extends HTMLElement {
           Next
         </button>
 
-        <button ${page === total - 1 ? 'disabled' : ''} data-page="${
-  total - 1
-}">
+        <button ${page === total - 1 ? 'disabled' : ''} data-page="${total - 1}">
           Last
         </button>
       </div>
