@@ -69,3 +69,7 @@ Solution: use `composed`: true
 
 It reinforced that Web Components are a solid, framework-agnostic solution when you need encapsulation, reusability, and long-term stability.
 I’ll definitely reuse this setup as a base for future experiments and component libraries.
+
+
+### Screenshot
+<img width="3456" height="2264" alt="poke-fetch" src="https://github.com/user-attachments/assets/daea75d2-de6f-4b4f-bac8-78ea1c416d6b" />
