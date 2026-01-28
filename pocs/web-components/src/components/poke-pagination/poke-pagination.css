@@ -1,0 +1,45 @@
+:host {
+  display: block;
+}
+
+.pagination {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+  margin: 24px 0;
+  font-family: system-ui, sans-serif;
+}
+
+button {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 6px;
+  border: 1px solid #374151;
+  background: #1f2933;
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+button:hover:not(:disabled) {
+  background: #374151;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+button.active {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: white;
+}
+
+span {
+  margin: 0 6px;
+  font-size: 13px;
+  opacity: 0.7;
+}

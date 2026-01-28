@@ -1,13 +1,13 @@
-import css from './app-navbar.css?inline'
+import css from './app-navbar.css?inline';
 
-const sheet = new CSSStyleSheet()
-sheet.replaceSync(css)
+const sheet = new CSSStyleSheet();
+sheet.replaceSync(css);
 
 class AppNavbar extends HTMLElement {
   constructor() {
-    super()
-    this.attachShadow({ mode: 'open' })
-    this.shadowRoot.adoptedStyleSheets = [sheet]
+    super();
+    this.attachShadow({ mode: 'open' });
+    this.shadowRoot.adoptedStyleSheets = [sheet];
   }
 
   connectedCallback() {
@@ -15,8 +15,8 @@ class AppNavbar extends HTMLElement {
       <nav>
         Poke POC — Fetch vs Axios
       </nav>
-    `
+    `;
   }
 }
 
-customElements.define('app-navbar', AppNavbar)
+customElements.define('app-navbar', AppNavbar);

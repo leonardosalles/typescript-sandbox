@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 
 
 export const axiosClient = axios.create({
@@ -11,14 +11,14 @@ axiosClient.interceptors.request.use(
     console.log('[AXIOS MIDDLEWARE] Request:', {
       method: config.method,
       url: config.url,
-    })
+    });
 
     return config;
   },
   error => {
-    console.error('[AXIOS MIDDLEWARE] Request error:', error)
+    console.error('[AXIOS MIDDLEWARE] Request error:', error);
     return Promise.reject(error);
-  }
+  },
 );
 
 axiosClient.interceptors.response.use(
@@ -26,23 +26,23 @@ axiosClient.interceptors.response.use(
     console.log('[AXIOS MIDDLEWARE] Response:', {
       status: response.status,
       url: response.config.url,
-    })
+    });
 
-    return response
+    return response;
   },
   error => {
-    console.error('[AXIOS MIDDLEWARE] Response error:', error)
-    return Promise.reject(error)
-  }
-)
+    console.error('[AXIOS MIDDLEWARE] Response error:', error);
+    return Promise.reject(error);
+  },
+);
 
 export async function axiosPokemons(page, limit = 10) {
-  const offset = page * limit
+  const offset = page * limit;
 
   const res = await axiosClient.get('/pokemon', {
     params: { limit, offset },
-  })
+  });
 
-  return res.data
+  return res.data;
 }
 

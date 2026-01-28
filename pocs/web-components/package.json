@@ -6,14 +6,18 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
     "vite": "^7.2.4"
   },
   "dependencies": {
+    "@eslint/js": "^9.39.2",
     "autoprefixer": "^10.4.23",
     "axios": "^1.13.4",
+    "eslint": "^9.39.2",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18"
   }
