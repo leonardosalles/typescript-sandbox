@@ -16,6 +16,7 @@ export default [
         CustomEvent: 'readonly',
         fetch: 'readonly',
         console: 'readonly',
+        performance: 'readonly',
       },
     },
 
