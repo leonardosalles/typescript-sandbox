@@ -3,6 +3,7 @@
   import Store from './lib/Store.svelte';
   import Lifecycle from './lib/Lifecycle.svelte';
   import Binding from './lib/Binding.svelte';
+  import ContextParent from './lib/ContextParent.svelte';
 
   let showLife = true;
   let v = 0;
@@ -13,6 +14,7 @@
 <Reactive />
 <Store />
 <Binding />
+<ContextParent />
 
 <hr />
 
