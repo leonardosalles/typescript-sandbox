@@ -4,6 +4,8 @@
   import Lifecycle from './lib/Lifecycle.svelte';
   import Binding from './lib/Binding.svelte';
   import ContextParent from './lib/ContextParent.svelte';
+  import BigList from './lib/BigList.svelte';
+  import Async from './lib/Async.svelte';
 
   let showLife = true;
   let v = 0;
@@ -12,10 +14,16 @@
 <h1>Svelte Deep POC</h1>
 
 <Reactive />
+<hr />
 <Store />
+<hr />
 <Binding />
+<hr />
 <ContextParent />
-
+<hr />
+<Async />
+<hr />
+<BigList />
 <hr />
 
 <button on:click={() => showLife = !showLife}>
