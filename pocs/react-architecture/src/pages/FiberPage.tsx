@@ -1,8 +1,11 @@
 import Visualizer from "../components/Visualizer";
 import { useHeavyCompute } from "../hooks/useHeavyCompute";
+import { useJankMonitor } from "../hooks/useJankMonitor";
 
 export default function FiberPage() {
   const { text, items, isPending, updateData } = useHeavyCompute("fiber");
+
+  useJankMonitor("Fiber Mode");
 
   return (
     <div className="fiber-mode">
