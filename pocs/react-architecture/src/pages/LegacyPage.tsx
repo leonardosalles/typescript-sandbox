@@ -1,11 +1,13 @@
 import { useHeavyCompute } from "../hooks/useHeavyCompute";
 import Visualizer from "../components/Visualizer";
 import { useJankMonitor } from "../hooks/useJankMonitor";
+import { useRenderMetrics } from "../hooks/useRenderMetrics";
 
 export default function LegacyPage() {
   const { text, items, updateData } = useHeavyCompute("legacy");
 
   useJankMonitor("Legacy Mode");
+  useRenderMetrics("Legacy Engine");
 
   return (
     <div className="sync-mode">

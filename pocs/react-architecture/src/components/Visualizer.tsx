@@ -1,9 +1,15 @@
 import { useLayoutEffect } from "react";
+import LifecycleLogger from "./LifecycleLogger";
 
-const SlowItem = () => {
+const SlowItem = ({ id }: { id: number }) => {
   const start = performance.now();
   while (performance.now() - start < 1) {}
-  return <div className="dot" />;
+
+  return (
+    <div className="dot">
+      <LifecycleLogger label={id} />
+    </div>
+  );
 };
 
 export default function Visualizer({
@@ -20,7 +26,7 @@ export default function Visualizer({
   return (
     <div className="grid-container">
       {items.map((_, i) => (
-        <SlowItem key={i} />
+        <SlowItem key={i} id={i} />
       ))}
     </div>
   );
