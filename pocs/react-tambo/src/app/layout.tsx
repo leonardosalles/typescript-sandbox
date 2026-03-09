@@ -3,10 +3,13 @@
 import React from "react";
 import "./globals.css";
 import { TamboProvider } from "@tambo-ai/react";
-import { seatMapTamboComponent } from "@/lib/tambo";
+import {
+  flightDurationTamboComponent,
+  seatMapTamboComponent,
+} from "@/lib/tambo";
 import { MOCK_FLIGHT } from "@/lib/mockData";
 
-const tamboComponents = [seatMapTamboComponent];
+const tamboComponents = [seatMapTamboComponent, flightDurationTamboComponent];
 
 export default function RootLayout({
   children,

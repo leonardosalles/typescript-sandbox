@@ -4,7 +4,7 @@ import React, { useMemo, useEffect, useRef } from "react";
 import { useTambo, useTamboThreadInput } from "@tambo-ai/react";
 import type { TamboComponentContent } from "@tambo-ai/react";
 import { MOCK_FLIGHT } from "@/lib/mockData";
-import PlaneIcon from "@/components/PlaneIcon";
+import PlaneIcon from "@/components/plane-icon";
 
 function parseFlightInfo(
   messages: { role: string; content: { type: string; text?: string }[] }[],
@@ -42,6 +42,19 @@ function parseFlightInfo(
   };
 }
 
+function renderText(text: string) {
+  const parts = text.split(/\*\*(.*?)\*\*/g);
+  return parts.map((part, i) =>
+    i % 2 === 1 ? (
+      <strong key={i} className="font-semibold">
+        {part}
+      </strong>
+    ) : (
+      part
+    ),
+  );
+}
+
 export default function ChatPage() {
   const { messages, isStreaming, isWaiting } = useTambo();
   const { value, setValue, submit, isPending } = useTamboThreadInput();
@@ -52,22 +65,10 @@ export default function ChatPage() {
   );
 
   const bottomRef = useRef<HTMLDivElement>(null);
-  const componentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const lastMessage = messages[messages.length - 1];
-    const hasComponent = lastMessage?.content?.some(
-      (p) => p.type === "component",
-    );
-    if (hasComponent && componentRef.current) {
-      componentRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    } else {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages, isStreaming, isWaiting]);
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const occupancy = Math.round(
     ((flightInfo.totalSeats - flightInfo.availableSeats) /
@@ -134,67 +135,82 @@ export default function ChatPage() {
             </div>
           )}
 
-          {messages.map((message) => {
-            const isUser = message.role === "user";
+          {(() => {
+            type Msg = (typeof messages)[number];
+            const groups: Msg[][] = [];
+            for (const message of messages) {
+              const last = groups[groups.length - 1];
+              if (
+                last &&
+                message.role === "assistant" &&
+                last[0].role === "assistant"
+              ) {
+                last.push(message);
+              } else {
+                groups.push([message]);
+              }
+            }
 
-            const textContent = message.content
-              .filter((p) => p.type === "text")
-              .map((p) => ("text" in p ? String(p.text) : ""))
-              .join(" ");
+            return groups.map((group) => {
+              const isUser = group[0].role === "user";
 
-            const componentBlocks = message.content.filter(
-              (p): p is TamboComponentContent => p.type === "component",
-            );
+              const allComponentBlocks = group.flatMap((m) =>
+                m.content.filter(
+                  (p): p is TamboComponentContent => p.type === "component",
+                ),
+              );
+              const allText = group
+                .flatMap((m) => m.content.filter((p) => p.type === "text"))
+                .map((p) => ("text" in p ? String(p.text) : ""))
+                .join(" ")
+                .trim();
 
-            const hasComponent = componentBlocks.length > 0;
+              if (!isUser && !allText && allComponentBlocks.length === 0)
+                return null;
 
-            return (
-              <div
-                key={message.id}
-                className={`flex ${isUser ? "justify-end" : "justify-start"} gap-3`}
-              >
-                {!isUser && (
-                  <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-white text-xs">AI</span>
-                  </div>
-                )}
-
+              return (
                 <div
-                  className={`max-w-2xl w-full ${isUser ? "items-end" : "items-start"} flex flex-col gap-2`}
+                  key={group[0].id}
+                  className={`flex ${isUser ? "justify-end" : "justify-start"} gap-3`}
                 >
-                  {textContent && (
-                    <div
-                      className={`px-4 py-3 rounded-2xl text-sm ${
-                        isUser
-                          ? "bg-slate-800 text-white rounded-tr-sm"
-                          : "bg-white text-slate-700 border border-slate-200 rounded-tl-sm shadow-sm"
-                      }`}
-                    >
-                      {textContent}
+                  {!isUser && (
+                    <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-white text-xs">AI</span>
                     </div>
                   )}
-                  {componentBlocks.map((block, i) =>
-                    block.renderedComponent ? (
-                      // ref on first component block of the last message
+
+                  <div
+                    className={`max-w-2xl w-full ${isUser ? "items-end" : "items-start"} flex flex-col gap-2`}
+                  >
+                    {allComponentBlocks.map((block, i) =>
+                      block.renderedComponent ? (
+                        <div key={i} className="w-full">
+                          {block.renderedComponent}
+                        </div>
+                      ) : null,
+                    )}
+                    {allText && (
                       <div
-                        key={i}
-                        ref={i === 0 && hasComponent ? componentRef : undefined}
-                        className="w-full mt-1"
+                        className={`px-4 py-3 rounded-2xl text-sm ${
+                          isUser
+                            ? "bg-slate-800 text-white rounded-tr-sm"
+                            : "bg-white text-slate-700 border border-slate-200 rounded-tl-sm shadow-sm"
+                        }`}
                       >
-                        {block.renderedComponent}
+                        {renderText(allText)}
                       </div>
-                    ) : null,
+                    )}
+                  </div>
+
+                  {isUser && (
+                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-white text-xs">LS</span>
+                    </div>
                   )}
                 </div>
-
-                {isUser && (
-                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                    <span className="text-white text-xs">LS</span>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+              );
+            });
+          })()}
 
           {(isPending || isStreaming || isWaiting) && (
             <div className="flex justify-start gap-3">
