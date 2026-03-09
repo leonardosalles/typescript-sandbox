@@ -1,15 +1,8 @@
 "use client";
 
 import { useState } from "react";
-
-type SeatStatus = "available" | "occupied" | "selected" | "exit" | "business";
-
-interface Seat {
-  id: string;
-  row: number;
-  col: string;
-  status: SeatStatus;
-}
+import { Seat } from "@/lib/types";
+import { generateSeats } from "@/lib/utils";
 
 interface SeatMapProps {
   flightNumber?: string;
@@ -24,65 +17,16 @@ interface SeatMapProps {
   businessClassRows?: number;
 }
 
-function generateSeats(
-  rows: number,
-  seatsPerRow: number,
-  availableCount: number,
-  exitRows: number[],
-  businessClassRows: number,
-): Seat[] {
-  const cols = ["A", "B", "C", "D", "E", "F"].slice(0, seatsPerRow);
-  const seats: Seat[] = [];
-  let availableRemaining = availableCount;
-  const totalSeats = rows * seatsPerRow;
-  const occupiedCount = totalSeats - availableCount;
-  let occupiedAssigned = 0;
-
-  for (let row = 1; row <= rows; row++) {
-    for (const col of cols) {
-      const id = `${row}${col}`;
-      let status: SeatStatus;
-
-      if (row <= businessClassRows) {
-        status = "business";
-      } else if (exitRows.includes(row)) {
-        status = "exit";
-      } else if (availableRemaining > 0) {
-        const shouldBeAvailable =
-          occupiedAssigned >= occupiedCount ||
-          (availableRemaining /
-            (availableRemaining + (occupiedCount - occupiedAssigned)) >
-            0.5 &&
-            (row + col.charCodeAt(0)) % 3 !== 0);
-
-        if (shouldBeAvailable) {
-          status = "available";
-          availableRemaining--;
-        } else {
-          status = "occupied";
-          occupiedAssigned++;
-        }
-      } else {
-        status = "occupied";
-        occupiedAssigned++;
-      }
-
-      seats.push({ id, row, col, status });
-    }
-  }
-  return seats;
-}
-
 export default function SeatMap({
-  flightNumber = "LA3042",
-  origin = "GRU",
-  destination = "GIG",
-  totalSeats = 150,
-  availableSeats = 42,
-  rows = 25,
-  seatsPerRow = 6,
-  exitRows = [12, 13],
-  businessClassRows = 3,
+  flightNumber = "",
+  origin = "",
+  destination = "",
+  totalSeats = 0,
+  availableSeats = 0,
+  rows = 0,
+  seatsPerRow = 0,
+  exitRows = [],
+  businessClassRows = 0,
 }: SeatMapProps) {
   const [selectedSeat, setSelectedSeat] = useState<string | null>(null);
   const occupiedSeats = totalSeats - availableSeats;

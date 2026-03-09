@@ -13,15 +13,15 @@ interface FlightDurationProps {
 }
 
 export default function FlightDuration({
-  flightNumber = "LA3042",
-  origin = "GRU",
-  destination = "GIG",
-  originCity = "São Paulo",
-  destinationCity = "Rio de Janeiro",
-  departureTime = "14:35",
-  arrivalTime = "15:40",
-  duration = "1h 05min",
-  date = "Mar 9, 2026",
+  flightNumber,
+  origin,
+  destination,
+  originCity,
+  destinationCity,
+  departureTime,
+  arrivalTime,
+  duration,
+  date,
 }: FlightDurationProps) {
   return (
     <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden max-w-lg w-full">
