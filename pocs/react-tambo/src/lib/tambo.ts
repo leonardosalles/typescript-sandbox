@@ -17,7 +17,7 @@ const SeatMapPropsSchema = z.object({
 
 export const seatMapTamboComponent: TamboComponent = {
   name: "SeatMap",
-  description: `ALWAYS render this component immediately when the user asks anything about seats, seat availability, seat map, seat layout, how many seats, available seats, or occupied seats in a flight. Do NOT ask clarifying questions — use default values if no specific flight data is provided. Render immediately.`,
+  description: `Use this component ONLY when the user explicitly asks about seats — such as seat map, seat availability, how many seats are available, how many seats are occupied, or seat layout. Do not use for questions about flight duration, timing, or other topics.`,
   component: SeatMap,
   propsSchema: SeatMapPropsSchema,
 };
@@ -36,7 +36,7 @@ const FlightDurationPropsSchema = z.object({
 
 export const flightDurationTamboComponent: TamboComponent = {
   name: "FlightDuration",
-  description: `ALWAYS render this component immediately when the user asks about flight duration, how long the flight takes, departure time, arrival time, flight schedule, or anything related to flight timing. Do NOT ask clarifying questions — use default values if no specific data is provided. Render immediately.`,
+  description: `Use this component ONLY when the user explicitly asks about flight duration, how long the flight takes, departure time, arrival time, or flight schedule. Do not use for questions about seats or other topics.`,
   component: FlightDuration,
   propsSchema: FlightDurationPropsSchema,
 };

@@ -3,7 +3,7 @@ export const MOCK_FLIGHT = {
   origin: "SFO",
   destination: "LAX",
   departureTime: "2:35 PM",
-  arrivalTime: "3:40 PM",
+  arrivalTime: "4:05 PM",
   totalSeats: 150,
   availableSeats: 42,
   rows: 25,
