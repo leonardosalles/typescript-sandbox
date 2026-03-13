@@ -1,3 +1,6 @@
+<img width="1920" height="956" alt="screenshot" src="https://github.com/user-attachments/assets/6c150a03-726d-4c2d-8eac-c50cb9446ba4" />
+
+
 # TanStack Router — POC
 
 ## Stack
