@@ -1,6 +1,0 @@
-{
-	"dependencies": {
-		"tambo": "^0.54.0",
-		"openai": "^6.27.0"
-	}
-}
