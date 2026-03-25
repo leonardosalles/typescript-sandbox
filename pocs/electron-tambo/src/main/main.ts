@@ -104,3 +104,90 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
+
+ipcMain.handle("system:get-brightness", async () => {
+  try {
+    if (process.platform === "darwin") {
+      const out = execSync("brightness -l 2>/dev/null || echo '0.5'")
+        .toString()
+        .trim();
+      const match = out.match(/brightness\s+([\d.]+)/);
+      const value = match ? parseFloat(match[1]) : 0.5;
+      return { success: true, brightness: Math.round(value * 100) };
+    }
+    return { success: true, brightness: 50 };
+  } catch {
+    return { success: true, brightness: 50 };
+  }
+});
+
+ipcMain.handle("system:set-brightness", async (_event, level: number) => {
+  const pct = Math.max(0, Math.min(100, level));
+  const normalized = (pct / 100).toFixed(2);
+  try {
+    if (process.platform === "darwin") {
+      execSync(`brightness ${normalized} 2>/dev/null || true`);
+    } else if (process.platform === "linux") {
+      execSync(
+        `xrandr --output $(xrandr | grep ' connected' | awk '{print $1}' | head -1) --brightness ${normalized} 2>/dev/null || true`,
+      );
+    }
+    return { success: true, brightness: pct };
+  } catch (err) {
+    return { success: false, error: String(err) };
+  }
+});
+
+ipcMain.handle("system:clipboard-read", async () => {
+  const { clipboard } = await import("electron");
+  const text = clipboard.readText();
+  return { success: true, text };
+});
+
+ipcMain.handle("system:clipboard-write", async (_event, text: string) => {
+  const { clipboard } = await import("electron");
+  clipboard.writeText(text);
+  return { success: true };
+});
+
+ipcMain.handle("system:launch-app", async (_event, appName: string) => {
+  return new Promise((resolve) => {
+    if (process.platform === "darwin") {
+      exec(`open -a "${appName}"`, (err) => {
+        if (err)
+          resolve({ success: false, error: `Could not open "${appName}"` });
+        else resolve({ success: true, appName });
+      });
+    } else if (process.platform === "linux") {
+      exec(
+        `gtk-launch "${appName.toLowerCase()}" 2>/dev/null || xdg-open "${appName}" 2>/dev/null`,
+        (err) => {
+          if (err) resolve({ success: false, error: String(err) });
+          else resolve({ success: true, appName });
+        },
+      );
+    } else if (process.platform === "win32") {
+      exec(`start "" "${appName}"`, (err) => {
+        if (err) resolve({ success: false, error: String(err) });
+        else resolve({ success: true, appName });
+      });
+    } else {
+      resolve({ success: false, error: "Platform not supported" });
+    }
+  });
+});
+
+ipcMain.handle("system:list-apps", async () => {
+  if (process.platform === "darwin") {
+    return new Promise((resolve) => {
+      exec(`ls /Applications | grep .app | sed 's/.app//'`, (err, stdout) => {
+        if (err) resolve({ success: false, apps: [] });
+        else {
+          const apps = stdout.trim().split("\n").filter(Boolean).slice(0, 30);
+          resolve({ success: true, apps });
+        }
+      });
+    });
+  }
+  return { success: true, apps: [] };
+});
