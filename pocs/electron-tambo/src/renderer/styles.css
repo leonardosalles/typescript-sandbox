@@ -484,3 +484,98 @@ body,
   margin: 4px 0;
   opacity: 0.75;
 }
+
+.brightness-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brightness-sun {
+  background: #f5c842;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(245, 200, 66, 0.4);
+  transition:
+    width 0.3s,
+    height 0.3s;
+}
+.brightness-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f5c842, #fff8dc);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.clipboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.clipboard-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.clipboard-text {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  word-break: break-all;
+  max-height: 80px;
+  overflow-y: auto;
+  line-height: 1.5;
+}
+
+.launcher-target {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+}
+.launcher-app-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+.launcher-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.launcher-suggestions-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.launcher-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.launcher-chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-family: var(--font);
+  font-size: 11px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+}
+.launcher-chip:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.launcher-chip:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
