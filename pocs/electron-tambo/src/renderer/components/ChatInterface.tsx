@@ -79,7 +79,7 @@ export function ChatInterface() {
                 return null;
               })}
 
-              {typeof msg.content === "string" && msg.content && (
+              {typeof msg.content === "string" && msg.content.trim() && (
                 <div className="chat-bubble">
                   {isUser ? (
                     msg.content

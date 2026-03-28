@@ -59,7 +59,7 @@ export function OpenUrl({ url, label }: OpenUrlProps) {
       <div
         className={`tambo-status tambo-status--${opened ? "done" : "loading"}`}
       >
-        {opened ? "Opened in browser!" : "Opening…"}
+        {opened ? "✅ Opened in browser!" : "⏳ Opening…"}
       </div>
       <button className="tambo-btn" onClick={handleOpen}>
         Open Again
