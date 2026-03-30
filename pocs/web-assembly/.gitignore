@@ -1,0 +1,6 @@
+target/
+www/pkg/
+pkg/
+*.wasm
+*.wat
+node_modules/
