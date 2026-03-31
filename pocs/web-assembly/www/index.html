@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>POC — WebAssembly + Rust</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>
+        POC — <span class="rust">Rust</span> →
+        <span class="wasm">WebAssembly</span>
+      </h1>
+      <p>
+        Deep POC: benchmarks, acesso direto à memória, callbacks e manipulação
+        de buffers
+      </p>
+    </header>
+
+    <div class="status-bar">
+      <div class="dot loading" id="status-dot"></div>
+      <span id="status-text">Carregando módulo WASM...</span>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('benchmark')">
+        benchmark
+      </button>
+      <button class="tab" onclick="showTab('memory')">memória</button>
+      <button class="tab" onclick="showTab('callbacks')">callbacks</button>
+      <button class="tab" onclick="showTab('strings')">strings</button>
+      <button class="tab" onclick="showTab('log')">log</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-benchmark">
+      <section>
+        <h2>Fibonacci — O(2ⁿ)</h2>
+        <div class="card">
+          <div class="card-title">
+            Ambos recursivos, mesmo algoritmo. Mede custo computacional puro.
+          </div>
+          <div class="row">
+            <label>n =</label>
+            <input type="number" id="fib-n" value="38" min="1" max="45" />
+            <button class="primary" id="btn-fib" onclick="runFibBench()">
+              Executar benchmark
+            </button>
+          </div>
+          <div class="results" id="fib-results"></div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Crivo de Eratóstenes</h2>
+        <div class="card">
+          <div class="card-title">
+            Aloca e filena um Vec&lt;bool&gt; em Rust, retorna Uint32Array.
+            Observe o overhead de transferência.
+          </div>
+          <div class="row">
+            <label>limite =</label>
+            <input
+              type="number"
+              id="sieve-n"
+              value="1000000"
+              min="1000"
+              max="10000000"
+              step="1000"
+            />
+            <button class="primary" id="btn-sieve" onclick="runSieveBench()">
+              Executar benchmark
+            </button>
+          </div>
+          <div class="results" id="sieve-results"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="tab-panel" id="tab-memory">
+      <section>
+        <h2>Acesso direto à memória WASM</h2>
+        <div class="card">
+          <div class="card-title">
+            Aloca bytes no heap Rust via <code>alloc()</code>, escreve
+            diretamente com <code>fill_buffer()</code>, lê de volta via
+            <code>wasm.memory.buffer</code>. Zero cópias JS↔WASM.
+          </div>
+          <div class="row">
+            <label>bytes =</label>
+            <input
+              type="number"
+              id="mem-size"
+              value="64"
+              min="16"
+              max="1024"
+              step="16"
+            />
+            <label>valor =</label>
+            <input type="number" id="mem-val" value="42" min="0" max="255" />
+            <button class="primary" onclick="runMemoryDemo()">
+              Alocar e preencher
+            </button>
+            <button onclick="freeMemory()">Liberar</button>
+          </div>
+          <div class="memory-section">
+            <div
+              id="mem-info"
+              class="card-title"
+              style="margin-top: 10px"
+            ></div>
+            <div class="mem-view" id="mem-view"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Soma do buffer — leitura direta sem passar pelo JS
+          </div>
+          <button onclick="runSumBuffer()">sum_buffer(ptr, len)</button>
+          <div
+            id="sum-result"
+            style="margin-top: 10px; color: var(--green); font-size: 13px"
+          ></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="tab-panel" id="tab-callbacks">
+      <section>
+        <h2>Rust chamando closures JavaScript</h2>
+        <div class="card">
+          <div class="card-title">
+            <code>for_each_prime(limit, callback)</code> — Rust itera os primos
+            e chama uma função JS para cada um. Observe o overhead de
+            cross-boundary calls.
+          </div>
+          <div class="row">
+            <label>limite =</label>
+            <input
+              type="number"
+              id="cb-limit"
+              value="10000"
+              min="100"
+              max="100000"
+              step="1000"
+            />
+            <button class="primary" onclick="runCallback()">Executar</button>
+          </div>
+          <div id="cb-result" style="margin-top: 12px"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <code>reduce_primes(limit, reducer, initial)</code> — aplica um
+            reducer JS em todos os primos. Exemplo: somar, encontrar o maior,
+            calcular produto.
+          </div>
+          <div class="row">
+            <label>limite =</label>
+            <input
+              type="number"
+              id="reduce-limit"
+              value="1000"
+              min="10"
+              max="100000"
+              step="100"
+            />
+            <button onclick="runReduceSum()">Somar primos</button>
+            <button onclick="runReduceMax()">Maior primo</button>
+            <button onclick="runReduceProduct()">Produto (mod)</button>
+          </div>
+          <div id="reduce-result" style="margin-top: 12px"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="tab-panel" id="tab-strings">
+      <section>
+        <h2>Custo de strings na boundary WASM</h2>
+        <div class="card">
+          <div class="card-title">
+            Strings cruzam a boundary com alocação UTF-8 — muito mais caro que
+            buffers numéricos. Compare <code>count_occurrences</code> WASM vs
+            indexOf loop em JS.
+          </div>
+          <div class="row">
+            <label>tamanho (KB) =</label>
+            <input type="number" id="str-size" value="100" min="1" max="5000" />
+            <label>padrão =</label>
+            <input
+              type="text"
+              id="str-pattern"
+              value="abc"
+              style="
+                width: 80px;
+                background: var(--surface2);
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                color: var(--text);
+                font-family: var(--font-mono);
+                font-size: 13px;
+                padding: 6px 10px;
+                outline: none;
+              "
+            />
+            <button class="primary" onclick="runStringBench()">
+              Benchmark
+            </button>
+          </div>
+          <div class="results" id="str-results"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <code>reverse_string(s)</code> — reversão correta de Unicode (por
+            char, não byte)
+          </div>
+          <div class="row">
+            <input
+              type="text"
+              id="str-input"
+              value="Olá, 世界! 🦀"
+              style="
+                flex: 1;
+                background: var(--surface2);
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                color: var(--text);
+                font-family: var(--font-mono);
+                font-size: 13px;
+                padding: 6px 10px;
+                outline: none;
+              "
+            />
+            <button onclick="runReverseString()">Inverter</button>
+          </div>
+          <div
+            id="reverse-result"
+            style="margin-top: 10px; color: var(--wasm); font-size: 14px"
+          ></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="tab-panel" id="tab-log">
+      <section>
+        <h2>Log de execução</h2>
+        <div class="row" style="margin-bottom: 10px">
+          <button onclick="clearLog()">Limpar log</button>
+          <span style="color: var(--muted); font-size: 11px; margin-left: 8px"
+            >Todas as operações são registradas aqui</span
+          >
+        </div>
+        <div class="log" id="log-output"></div>
+      </section>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
