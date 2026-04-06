@@ -1,0 +1,23 @@
+# Java
+target/
+*.class
+*.jar
+
+# Maven
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+
+# TypeScript
+node_modules/
+dist/
+*.js.map
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.code-workspace
+
+# Misc
+.env
+.DS_Store
