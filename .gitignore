@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # build output
 dist/
 
@@ -132,23 +131,19 @@ dist
 # TernJS port file
 .tern-port
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-=======
 node_modules/
 dist/
 .next/
 .nuxt/
 .output/
 *.local
->>>>>>> e7877e5 (chore: init monorepo structure with workspaces)
 
 # Bun
 bun.lockb
 
 # npm
 package-lock.json
-<<<<<<< HEAD
 **/*.bun
-=======
 npm-debug.log*
 
 # Editor
@@ -164,4 +159,3 @@ Thumbs.db
 # Build
 apps/frontend/dist/
 apps/backend/dist/
->>>>>>> e7877e5 (chore: init monorepo structure with workspaces)
