@@ -25,7 +25,7 @@ All are constructed via static factory methods. Constructors are private to enfo
 
 - `Product` — has a `ProductCategory` enum (not a string). Prevents invalid categories.
 - `USState` — enum of state abbreviations. No magic strings.
-- `TaxContext` — the input to any tax calculation. Groups product + state + year + quantity. Immutable after creation; `forQuantity()` returns a new context.
+- `TaxContext` — the input to any tax calculation. Groups product + state + year + quantity. Immutable after creation.
 
 ### Strategy Pattern: TaxPolicy
 
@@ -56,6 +56,7 @@ Concrete policies:
 
 - `isExempt(context)` — check exemptions first
 - `applicablePolicies(context)` — filter policies that apply
+- `policiesForState(state)` — introspect which policies cover a given state, using `coveredState` on each `StateTaxPolicy`
 
 Adding a new state means registering new policies. Zero changes to the calculator.
 
@@ -77,18 +78,21 @@ Adding a new state means registering new policies. Zero changes to the calculato
 
 ## Scenarios Covered
 
-| Scenario                                  | What it tests                                      |
-| ----------------------------------------- | -------------------------------------------------- |
-| Prescription insulin in CA                | National exemption overrides all state policy      |
-| Grocery across 5 states                   | Category exclusion working correctly per state     |
-| Alcohol in NY vs TX vs CA                 | Tiered (NY) vs flat sin tax comparison             |
-| Luxury clothing NY ($109 vs $110 vs $150) | Threshold boundary edge case                       |
-| Gucci bag in NY vs WA                     | Different luxury thresholds + rates                |
-| Netflix in CA across 2020–2024            | Digital goods policy activated in 2021             |
-| Cigarettes CA vs FL vs TX                 | 65% vs 85% excise, TX has no sin tax for tobacco   |
-| OTC aspirin vs Rx insulin in TX           | OTC taxable, Rx exempt                             |
-| WA electronics 2022 vs 2023               | Luxury tax introduced in 2023                      |
-| Bulk phones (qty 1, 2, 5) in WA           | Quantity scales both base price and luxury overage |
+| Scenario | What it tests |
+| --- | --- |
+| Prescription insulin in CA | National exemption overrides all state policy |
+| Grocery across 5 states | Category exclusion working correctly per state |
+| Grocery vs prepared food in CA + TX | FOOD_GROCERY exempt, FOOD_PREPARED taxable |
+| Alcohol in NY vs TX vs CA | Tiered (NY) vs flat sin tax comparison |
+| Luxury clothing NY ($109 vs $110 vs $150) | Threshold boundary edge case |
+| Gucci bag in NY vs WA | Different luxury thresholds + rates |
+| Netflix in CA across 2020–2024 | Digital goods policy activated in 2021 |
+| Cigarettes CA vs FL vs TX | 65% vs 85% excise, TX has no sin tax for tobacco |
+| OTC aspirin vs Rx insulin in TX | OTC taxable, Rx exempt |
+| WA electronics 2022 vs 2023 | Luxury tax introduced in 2023 |
+| Bulk phones (qty 1, 2, 5) in WA | Quantity scales both base price and luxury overage |
+| No-sales-tax states (DE, MT, NH, OR) | Registry returns zero naturally, no special casing |
+| policiesForState(CA) vs policiesForState(NY) | Registry introspection via coveredState |
 
 ## What makes this a Deep POC
 
@@ -102,6 +106,7 @@ Adding a new state means registering new policies. Zero changes to the calculato
 - Year ranges are first-class — you can model "this rate was valid 2020–2022"
 - Tiered taxes model real-world complexity (NY alcohol)
 - Luxury threshold taxes model "only the overage is taxable"
+- `coveredState` on each policy enables registry introspection without fake contexts
 
 ## What to explore next
 
