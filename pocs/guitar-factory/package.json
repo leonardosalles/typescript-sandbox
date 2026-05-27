@@ -1,0 +1,29 @@
+{
+  "name": "guitar-factory",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "scenarios": "tsx src/scenarios/GuitarFactoryScenarios.ts",
+    "test": "tsx src/tests/GuitarFactoryRules.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
+    "vite": "^8.0.4",
+    "typescript": "~6.0.2",
+    "tsx": "^4.21.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "three": "^0.181.2",
+    "lucide-react": "^0.556.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.181.0"
+  }
+}
