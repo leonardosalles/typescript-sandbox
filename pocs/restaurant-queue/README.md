@@ -4,7 +4,7 @@
 pnpm dev
 ```
 ### Patterns
-S — cada classe tem uma única razão para mudar
+S — each class has a reason to change
 
 O — new strategies: just add into StrategyRegistry, no existing code touched
 
@@ -24,3 +24,5 @@ D — QueueService depends on IQueueRepository, not from InMemoryQueueRepository
 | Singleton | `container.ts` | Global server state for the POC |
 
 ### Screenshots
+<img width="1912" height="993" alt="main" src="https://github.com/user-attachments/assets/a205187d-b6be-477b-93cc-8c453ab030b8" />
+<img width="1915" height="991" alt="add" src="https://github.com/user-attachments/assets/14a588aa-12e2-4b46-945f-9d67b54dad4d" />
