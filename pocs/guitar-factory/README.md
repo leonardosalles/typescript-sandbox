@@ -2,6 +2,10 @@
 
 ## What this is
 
+<img width="400" alt="1" src="https://github.com/user-attachments/assets/975e4f39-8e68-4001-b528-2ff0cbfc7312" />
+<img width="400" alt="2" src="https://github.com/user-attachments/assets/fa86901e-96c5-4028-9b3c-43a3d4362046" />
+<img width="400" alt="3" src="https://github.com/user-attachments/assets/b1cfe5af-d19c-48fd-8b51-6b2698cc4326" />
+
 This POC models a custom guitar factory. A user configures a guitar with family, model, body shape, wood, pickups, finish, strings, handedness, and onboard OS. The system chooses the right factory, prices the order, builds the guitar through a production line, publishes production events, and stores the finished instrument in inventory.
 
 The UI is a Vite + React + Three.js shop floor. The guitar is procedural: finish, body shape, pickups, string count, tone profile, and production progress update the 3D model as the configuration changes.
